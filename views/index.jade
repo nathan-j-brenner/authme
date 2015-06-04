@@ -8,28 +8,16 @@ block content
     p You are currently logged in as #{ username }
   else
     p You are not logged in. Would you like to be?
-    div
-      form(method="post" action="/register")
-        h2 Register a new account
-        div
-          label Username:
-            input(type="text" name="username" placeholder="username")
-        div
-          label Password:
-            input(type="password" name="password")
-        div
-          label Confirm Password:
-            input(type="password" name="password_confirm")
-        div
-          input(type="submit" value="Pleased to meet you!")
-    div
+    .log_in
+      h3 Log in
       form(method="post" action="/login")
-        h2 Log into an existing account
-        div
-          label Username:
-            input(type="text" name="username" placeholder="username")
-        div
-          label Password:
-            input(type="password" name="password")
-        div
-          input(type="submit" value="Let me in!")
+        input(type="text" name="username" value="username")
+        input(type="password" name="password" value="password")
+        input(type="submit" value="Let me in!")
+    .register
+      h3 Register a new account
+      form(method="post" action="/register")
+        input(type="text" name="username" value="username" required)
+        input(type="password" name="password" value="Create a password" required)
+        input(type="password" name="password_confirm" value="confirm the password" required)
+        input(type="submit" value="Pleased to meet you!")

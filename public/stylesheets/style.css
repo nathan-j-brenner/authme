@@ -1,8 +1,30 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	background-color: #C0DEED;
+	padding: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+header, div{
+	border: 1px solid black;
+	text-align: center;
+	background-color: #fff;
+}
+
+div{
+	width: 40%;
+	height: 40%;
+	margin: 2% 4%;
+	display: inline-block;
+}
+
+
+
 
 a {
   color: #00B7FF;
+}
+
+@media (max-width: 500px){
+	div{
+		display: block;
+	}
 }
