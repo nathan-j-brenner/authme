@@ -6,18 +6,27 @@ block content
     h3= error
   if username
     p You are currently logged in as #{ username }
+    form
+      p.tweet What's on your mind?
+      input.tweet#input_text(type="text" name="status")
+      input.tweet(type="submit" value="Tell everyone")
   else
     p You are not logged in. Would you like to be?
     .log_in
       h3 Log in
       form(method="post" action="/login")
         input(type="text" name="username" value="username")
+        br
         input(type="password" name="password" value="password")
+        br
         input(type="submit" value="Let me in!")
     .register
       h3 Register a new account
       form(method="post" action="/register")
         input(type="text" name="username" value="username" required)
+        br
         input(type="password" name="password" value="Create a password" required)
+        br
         input(type="password" name="password_confirm" value="confirm the password" required)
+        br
         input(type="submit" value="Pleased to meet you!")

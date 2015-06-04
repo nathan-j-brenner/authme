@@ -16,8 +16,13 @@ div{
 	display: inline-block;
 }
 
-
-
+.tweet{
+	display:inline-block;
+}
+#input_text{
+	width: 70%;
+	margin: 0 2%;
+}
 
 a {
   color: #00B7FF;
