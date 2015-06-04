@@ -6,9 +6,9 @@ block content
     h3= error
   if username
     p You are currently logged in as #{ username }
-    form
+    form(method="post" action="/tweet")
       p.tweet What's on your mind?
-      input.tweet#input_text(type="text" name="status")
+      input.tweet#input_text(type="text" name="tweet")
       input.tweet(type="submit" value="Tell everyone")
   else
     p You are not logged in. Would you like to be?

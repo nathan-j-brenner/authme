@@ -157,4 +157,35 @@ router.post('/login', function(request, response) {
   });
 });
 
+//tweet feed
+router.post('/tweet', function(request, response) {
+  var tweet = request.body.tweet,
+      database  = app.get('database');
+  database('feed').insert({
+    // username: request.cookies.username,
+    tweet: tweet
+  }).then(function(){
+    response.redirect('/');
+  });
+});
+
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
