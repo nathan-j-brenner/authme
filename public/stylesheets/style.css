@@ -8,7 +8,7 @@ header, div{
 	text-align: center;
 	background-color: #fff;
 }
-.error_container{
+.error_message{
 	background-color: red;
 }
 div{

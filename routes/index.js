@@ -89,7 +89,7 @@ router.post('/register', function(request, response) {
     Render the index page again, with an error message telling them what's
     wrong.
     */
-    response.render('error', {
+    response.render('index', {
       title: 'Error',
       user: null,
       error: "Password didn't match confirmation"
@@ -131,7 +131,7 @@ router.post('/login', function(request, response) {
     */
     if (records.length === 0) {
         response.render('index', {
-          title: 'Authorize Me!',
+          title: 'Error!',
           user: null,
           error: "No such user"
         });
@@ -145,6 +145,7 @@ router.post('/login', function(request, response) {
         acknowledge that they're logged in.
         */
         response.cookie('username', username);
+        response.cookie('password', password);
         response.redirect('/');
       } else {
         /*
@@ -181,7 +182,6 @@ module.exports = router;
 
 //when a get request is made on posts, posts from table appear in .posts
 
-//look at login process.  add conditional statements 
 //if not true for both fields, give error and return to exit loop
 // if(!password || !username){}
 
