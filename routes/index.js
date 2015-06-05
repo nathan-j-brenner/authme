@@ -1,6 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var app = require('../app')
+var pg = require('pg');
+var bluebird = require('bluebird');
+var knexConfig = require('../knexfile');
+var knex = require('knex')(knexConfig);
+
 
 /*
 This is a request handler for loading the main page. It will check to see if
@@ -9,6 +14,7 @@ a user is logged in, and render the index page either way.
 router.get('/', function(request, response, next) {
   var username;
   var password;
+  var user_id;
   /*
   Check to see if a user is logged in. If they have a cookie called
   "username," assume it contains their username
@@ -56,7 +62,18 @@ router.post('/register', function(request, response) {
       password = request.body.password,
       password_confirm = request.body.password_confirm,
       database = app.get('database');
-
+  // username authentication, but it's not working
+  // knex('users').where('username', username)
+  //   .then(function(result){
+    
+  //     if(result.length>0){
+  //       response.render('index', {
+  //         title: 'Authorize Me',
+  //         user: null,
+  //         error: "username already exist"
+  //       });
+  //   }
+  // }
   if (password === password_confirm) {
     /*
     This will insert a new record into the users table. The insert
@@ -67,9 +84,10 @@ router.post('/register', function(request, response) {
     worked with before. insert({}).then(function() {...}) is very similar
     to insert({}, function() {...});
     */
+    database = app.get('database');
     database('users').insert({
       username: username,
-      password: password,
+      password: password
     }).then(function() {
       /*
       Here we set a "username" cookie on the response. This is the cookie
@@ -79,9 +97,15 @@ router.post('/register', function(request, response) {
       Then we redirect the user to the root path, which will cause their
       browser to send another request that hits that GET handler.
       */
-      response.cookie('username', username);
-      response.cookie('password', password);
-      response.redirect('/');
+
+      knex('users').where({username: username}).select('user_id').then(function(results){
+        var user_id = results[0].user_id;
+        console.log(results);
+        response.cookie('username', username);
+        response.cookie('password', password);
+        response.cookie('user_id', user_id);
+        response.redirect('/');
+      })
     });
   } else {
     /*
@@ -92,7 +116,7 @@ router.post('/register', function(request, response) {
     response.render('index', {
       title: 'Error',
       user: null,
-      error: "Password didn't match confirmation"
+      error: "Password didn't match confirmation or that username is already taken"
     });
   }
 });
@@ -166,26 +190,54 @@ router.post('/login', function(request, response) {
 router.post('/tweet', function(request, response) {
   //when you add text to the tweet field and click tell everyone; the tweet messsage is saved in tweet
   //need to add user id in reference to who is using it and posted_at as timestamp
-  var tweet = request.body.tweet,
-      // posted_at = request.body.posted_at, doesn't work
-      database  = app.get('database');
-  database('feed').insert({
-    // username: request.cookies.username,
-    tweet: tweet
-  }).then(function(){
-    response.redirect('/');
-  });
+  // if(tweet.length<0){
+    var tweet = request.body.tweet;
+    // var user_id = request.cookie.user_id;
+    // var username = request.cookie.username;
+    var database  = app.get('database');
+    database('feed').insert({
+      tweet: tweet,
+      // user_id: user_id
+      //posted_at time
+    }).then(function(){
+      response.redirect('/');
+    });
+  // } else{
+  //   response.render('index', {
+  //     title: 'Error',
+  //     user: null,
+  //     error: "You can't post an empty message"
+  //   });
+  // }
 });
+
+  // var username = request.body.username,
+  //     password = request.body.password,
+  //     password_confirm = request.body.password_confirm,
+  //     database = app.get('database');
+
+  //   database('users').insert({
+  //     username: username,
+  //     password: password,
+  //   }).then(function() {
+      
+  //     Here we set a "username" cookie on the response. This is the cookie
+  //     that the GET handler above will look at to determine if the user is
+  //     logged in.
+
+  //     Then we redirect the user to the root path, which will cause their
+  //     browser to send another request that hits that GET handler.
+      
+  //     response.cookie('username', username);
+  //     response.cookie('password', password);
+  //     response.redirect('/');
+  //   });
+
 
 module.exports = router;
 
 
 //when a get request is made on posts, posts from table appear in .posts
-
-//if not true for both fields, give error and return to exit loop
-// if(!password || !username){}
-
-//if wrong password or password, redirect to another jade page with error messages/
 
 //cookies vs. cookie
 //cookie is setting in rend.response

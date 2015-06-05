@@ -5,7 +5,6 @@ block content
   if error
     .error_message
       h3= error
-    a(href='http://localhost:3000/') Home
   if username
     p You are currently logged in as #{ username }
     form(method="post" action="/tweet")
