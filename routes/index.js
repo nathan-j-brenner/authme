@@ -159,7 +159,10 @@ router.post('/login', function(request, response) {
 
 //tweet feed
 router.post('/tweet', function(request, response) {
+  //when you add text to the tweet field and click tell everyone; the tweet messsage is saved in tweet
+  //need to add user id in reference to who is using it and posted_at as timestamp
   var tweet = request.body.tweet,
+      // posted_at = request.body.posted_at, doesn't work
       database  = app.get('database');
   database('feed').insert({
     // username: request.cookies.username,
@@ -172,7 +175,19 @@ router.post('/tweet', function(request, response) {
 module.exports = router;
 
 
+//when a get request is made on posts, posts from table appear in .posts
 
+//look at login process.  add conditional statements 
+//if not true for both fields, give error and return to exit loop
+// if(!password || !username){}
+
+//if wrong password or password, redirect to another jade page with error messages/
+
+//cookies vs. cookie
+//cookie is setting in rend.response
+//res.cookies use for get
+
+//insert____.then(function(result){})
 
 
 
