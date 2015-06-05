@@ -192,46 +192,17 @@ router.post('/tweet', function(request, response) {
   //need to add user id in reference to who is using it and posted_at as timestamp
   // if(tweet.length<0){
     var tweet = request.body.tweet;
-    // var user_id = request.cookie.user_id;
-    // var username = request.cookie.username;
+    var user_id = request.cookies.user_id;
+    var username = request.cookies.username;
     var database  = app.get('database');
     database('feed').insert({
       tweet: tweet,
-      // user_id: user_id
+      user_id: user_id
       //posted_at time
     }).then(function(){
       response.redirect('/');
     });
-  // } else{
-  //   response.render('index', {
-  //     title: 'Error',
-  //     user: null,
-  //     error: "You can't post an empty message"
-  //   });
-  // }
 });
-
-  // var username = request.body.username,
-  //     password = request.body.password,
-  //     password_confirm = request.body.password_confirm,
-  //     database = app.get('database');
-
-  //   database('users').insert({
-  //     username: username,
-  //     password: password,
-  //   }).then(function() {
-      
-  //     Here we set a "username" cookie on the response. This is the cookie
-  //     that the GET handler above will look at to determine if the user is
-  //     logged in.
-
-  //     Then we redirect the user to the root path, which will cause their
-  //     browser to send another request that hits that GET handler.
-      
-  //     response.cookie('username', username);
-  //     response.cookie('password', password);
-  //     response.redirect('/');
-  //   });
 
 
 module.exports = router;
