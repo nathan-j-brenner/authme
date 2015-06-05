@@ -22,6 +22,10 @@ router.get('/', function(request, response, next) {
   if (request.cookies.username && request.cookies.password) {
     username = request.cookies.username;
     password = request.cookies.password;
+    knex.column('tweet', 'username').select().from('feed')
+      .then(function(result){ 
+        response.render('index', {tweet: result, username: result}) 
+      });
   } else {
     username = null;
     password = null;
@@ -197,9 +201,12 @@ router.post('/tweet', function(request, response) {
     var database  = app.get('database');
     database('feed').insert({
       tweet: tweet,
-      user_id: user_id
+      user_id: user_id,
+      username: username
       //posted_at time
-    }).then(function(){
+    }).then(function(result){
+      knex.column('tweet').select().from('feed');
+    }).then(function(result){ 
       response.redirect('/');
     });
 });

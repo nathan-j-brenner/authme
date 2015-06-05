@@ -4,6 +4,7 @@ exports.up = function(knex, Promise) {
     table.string('tweet');
     table.timestamp('posted_at');
     table.string('user_id');
+    table.string('username');
   });
 };
 

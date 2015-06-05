@@ -12,6 +12,10 @@ block content
       input.tweet#input_text(type="text" name="tweet")
       input.tweet(type="submit" value="Tell everyone")
     .posts
+      ul
+        each val in feed
+          li=val.username + " : " + val.tweet
+
     a(href='http://localhost:3000/') Home
   else
     p You are not logged in. Would you like to be?
