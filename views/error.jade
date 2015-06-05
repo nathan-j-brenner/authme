@@ -1,6 +1,7 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+	h1 Error
+	.error_container
+		p Your password does not match your confirmed password.  Please try again. 
+		a(href='http://localhost:3000/') Home

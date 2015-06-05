@@ -8,20 +8,23 @@ a user is logged in, and render the index page either way.
 */
 router.get('/', function(request, response, next) {
   var username;
+  var password;
   /*
   Check to see if a user is logged in. If they have a cookie called
   "username," assume it contains their username
   */
-  if (request.cookies.username) {
+  if (request.cookies.username && request.cookies.password) {
     username = request.cookies.username;
+    password = request.cookies.password;
   } else {
     username = null;
+    password = null;
   }
   /*
   render the index page. The username variable will be either null
   or a string indicating the username.
   */
-  response.render('index', { title: 'Authorize Me!', username: username });
+  response.render('index', { title: 'Authorize Me!', username: username, password: password});
 });
 
 /*
@@ -76,7 +79,8 @@ router.post('/register', function(request, response) {
       Then we redirect the user to the root path, which will cause their
       browser to send another request that hits that GET handler.
       */
-      response.cookie('username', username)
+      response.cookie('username', username);
+      response.cookie('password', password);
       response.redirect('/');
     });
   } else {
@@ -85,8 +89,8 @@ router.post('/register', function(request, response) {
     Render the index page again, with an error message telling them what's
     wrong.
     */
-    response.render('index', {
-      title: 'Authorize Me!',
+    response.render('error', {
+      title: 'Error',
       user: null,
       error: "Password didn't match confirmation"
     });
@@ -189,7 +193,7 @@ module.exports = router;
 
 //insert____.then(function(result){})
 
-
+//database('table').returning('user_id').insert({username})
 
 
 

@@ -8,7 +8,9 @@ header, div{
 	text-align: center;
 	background-color: #fff;
 }
-
+.error_container{
+	background-color: red;
+}
 div{
 	width: 40%;
 	height: 40%;
