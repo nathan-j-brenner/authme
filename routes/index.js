@@ -22,10 +22,10 @@ router.get('/', function(request, response, next) {
   if (request.cookies.username && request.cookies.password) {
     username = request.cookies.username;
     password = request.cookies.password;
-    knex.column('tweet', 'username').select().from('feed')
-      .then(function(result){ 
-        response.render('index', {tweet: result, username: result}) 
-      });
+    // knex.column('tweet', 'username').select().from('feed')
+    //   .then(function(result){ 
+    //     response.render('tweet', {tweet: result, username: result}) 
+    //   });
   } else {
     username = null;
     password = null;
@@ -191,7 +191,7 @@ router.post('/login', function(request, response) {
 });
 
 //tweet feed
-router.post('/tweet', function(request, response) {
+router.post('/', function(request, response) {
   //when you add text to the tweet field and click tell everyone; the tweet messsage is saved in tweet
   //need to add user id in reference to who is using it and posted_at as timestamp
   // if(tweet.length<0){
@@ -204,27 +204,16 @@ router.post('/tweet', function(request, response) {
       user_id: user_id,
       username: username
       //posted_at time
-    }).then(function(result){
-      knex.column('tweet').select().from('feed');
-    }).then(function(result){ 
-      response.redirect('/');
     });
+    // }).then(function(result){
+    //   knex.column('tweet').select().from('feed');
+    // }).then(function(result){ 
+    //   response.redirect('/');
+    // });
 });
 
 
 module.exports = router;
-
-
-//when a get request is made on posts, posts from table appear in .posts
-
-//cookies vs. cookie
-//cookie is setting in rend.response
-//res.cookies use for get
-
-//insert____.then(function(result){})
-
-//database('table').returning('user_id').insert({username})
-
 
 
 
