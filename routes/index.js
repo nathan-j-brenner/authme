@@ -25,6 +25,14 @@ router.get('/', function(request, response, next) {
   if (request.cookies.username && request.cookies.password) {
     username = request.cookies.username;
     password = request.cookies.password;
+    knex.select('*').from('feed').then(function(result){
+      // console.log(result[0].username + " said " + result[0].tweet + " at " + result[0].posted_at);
+      for(var i = 0;i<result.length; i++){
+        console.log(result[i].tweet);
+      }
+
+      // console.log(result);
+    })
   } else {
     username = null;
     password = null;
