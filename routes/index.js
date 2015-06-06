@@ -216,7 +216,10 @@ router.post('/tweet', function(request, response) {
 
 router.post('/logout', function(request, response){
   console.log('clear my cookies');
-  // response.redirect('/');
+  response.clearCookie('username');
+  response.clearCookie('password');
+  response.clearCookie('user_id');
+  response.redirect('/');
 })
 
 module.exports = router;
