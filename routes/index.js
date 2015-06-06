@@ -197,7 +197,7 @@ router.post('/login', function(request, response) {
 });
 
 //tweet feed
-router.post('/', function(request, response) {
+router.post('/tweet', function(request, response) {
   //when you add text to the tweet field and click tell everyone; the tweet messsage is saved in tweet
   //need to add user id in reference to who is using it and posted_at as timestamp
   // if(tweet.length<0){
