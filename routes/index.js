@@ -11,6 +11,9 @@ var knex = require('knex')(knexConfig);
 This is a request handler for loading the main page. It will check to see if
 a user is logged in, and render the index page either way.
 */
+/********************************
+if the user has logged in before, the home page for the user will display in the browser
+********************************/
 router.get('/', function(request, response, next) {
   var username;
   var password;
@@ -22,25 +25,28 @@ router.get('/', function(request, response, next) {
   if (request.cookies.username && request.cookies.password) {
     username = request.cookies.username;
     password = request.cookies.password;
-    // knex.column('tweet', 'username').select().from('feed')
-    //   .then(function(result){ 
-    //     response.render('tweet', {tweet: result, username: result}) 
-    //   });
+    knex.select('*').from('feed').then(function(result){
+      // for(var i = 0;i<result.length; i++){
+      //   console.log(result[i].username + " said " + "'" +result[i].tweet + "'" + " on " + result[i].posted_at);
+      // }
+      // console.log(result.length);
+      result.reverse();
+      response.render('main', { mess: result, name: result});
+    });
   } else {
     username = null;
     password = null;
+    response.render('index', { title: 'Authorize Me!', username: username, password: password});
   }
   /*
   render the index page. The username variable will be either null
   or a string indicating the username.
   */
-  response.render('index', { title: 'Authorize Me!', username: username, password: password});
+  // response.render('index', { title: 'Authorize Me!', username: username, password: password});
 });
 
 /*
-This is the request handler for receiving a registration request. It will
-check to see if the password and confirmation match, and then create a new
-user with the given username.
+This is the request handler for receiving a registration request. It will check to see if the password and confirmation match, and then create a new user with the given username.
 
 It has some bugs:
 
@@ -203,7 +209,8 @@ router.post('/', function(request, response) {
       tweet: tweet,
       user_id: user_id,
       username: username
-      //posted_at time
+    }).then(function(){
+      response.redirect('/');
     });
     // }).then(function(result){
     //   knex.column('tweet').select().from('feed');
@@ -212,6 +219,13 @@ router.post('/', function(request, response) {
     // });
 });
 
+router.post('/logout', function(request, response){
+  console.log('clear my cookies');
+  response.clearCookie('username');
+  response.clearCookie('password');
+  response.clearCookie('user_id');
+  response.redirect('/');
+})
 
 module.exports = router;
 

@@ -1,5 +1,10 @@
-body {
+.newUserPage{
 	background-color: #C0DEED;
+	padding: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+.userpage{
+	background-color: #385C6D;
 	padding: 50px;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -16,6 +21,10 @@ div{
 	height: 40%;
 	margin: 2% 4%;
 	display: inline-block;
+}
+.posts{
+	width: 100%;
+	text-align: left;
 }
 
 .tweet{
