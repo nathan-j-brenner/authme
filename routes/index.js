@@ -198,8 +198,8 @@ router.post('/tweet', function(request, response) {
     var database  = app.get('database');
     database('feed').insert({
       tweet: tweet,
-      user_id: user_id
-      //posted_at time
+      user_id: user_id,
+      username: username
     }).then(function(){
       response.redirect('/');
     });
