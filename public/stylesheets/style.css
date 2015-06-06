@@ -22,6 +22,10 @@ div{
 	margin: 2% 4%;
 	display: inline-block;
 }
+.posts{
+	width: 100%;
+	text-align: left;
+}
 
 .tweet{
 	display:inline-block;

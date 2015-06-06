@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p You are currently logged in as #{ username }
+  form(method="post" action="/tweet")
+    p.tweet What's on your mind?
+    input.tweet#input_text(type="text" name="tweet")
+    input.tweet(type="submit" value="Tell everyone")
+  .posts
+    ul
+      each val in mess
+        li= val.username + " said " + "'" +val.tweet + "'" + " on " + val.posted_at
+  a(href='http://localhost:3000/') Home
+  form(method="post" action="/logout")
+    input(type='submit' value='logout')

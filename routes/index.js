@@ -26,10 +26,11 @@ router.get('/', function(request, response, next) {
     username = request.cookies.username;
     password = request.cookies.password;
     knex.select('*').from('feed').then(function(result){
-      for(var i = 0;i<result.length; i++){
-        console.log(result[i].username + " said " + "'" +result[i].tweet + "'" + " on " + result[i].posted_at);
-      }
-      console.log(result.length);
+      // for(var i = 0;i<result.length; i++){
+      //   console.log(result[i].username + " said " + "'" +result[i].tweet + "'" + " on " + result[i].posted_at);
+      // }
+      // console.log(result.length);
+      result.reverse();
       response.render('main', { mess: result, name: result});
     });
   } else {
@@ -213,6 +214,10 @@ router.post('/tweet', function(request, response) {
     });
 });
 
+router.post('/logout', function(request, response){
+  console.log('clear my cookies');
+  // response.redirect('/');
+})
 
 module.exports = router;
 
