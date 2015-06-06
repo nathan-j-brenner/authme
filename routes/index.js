@@ -11,6 +11,9 @@ var knex = require('knex')(knexConfig);
 This is a request handler for loading the main page. It will check to see if
 a user is logged in, and render the index page either way.
 */
+/********************************
+if the user has logged in before, the home page for the user will display in the browser
+********************************/
 router.get('/', function(request, response, next) {
   var username;
   var password;
@@ -34,9 +37,7 @@ router.get('/', function(request, response, next) {
 });
 
 /*
-This is the request handler for receiving a registration request. It will
-check to see if the password and confirmation match, and then create a new
-user with the given username.
+This is the request handler for receiving a registration request. It will check to see if the password and confirmation match, and then create a new user with the given username.
 
 It has some bugs:
 
