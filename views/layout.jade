@@ -3,9 +3,4 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-  if username
-    body.userpage
-      block content
-  else
-    body.newUserPage
-      block content
+    block content

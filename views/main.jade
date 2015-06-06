@@ -1,8 +1,8 @@
 extends layout
 
 block content
-  h1= title
-  if username
+  body.userpage
+    h1= title
     p You are currently logged in as #{ username }
     form(method="post" action="/tweet")
       p.tweet What's on your mind?
