@@ -1,15 +1,15 @@
-extends layout
+//- extends layout
 
-block content
-	h1= title
-	p You are currently logged in as #{ username }
-    form(method="post" action="/tweet")
-      p.tweet What's on your mind?
-      input.tweet#input_text(type="text" name="tweet")
-      input.tweet(type="submit" value="Tell everyone")
-    .posts
-      ul
-        each val in tweet
-          li=val.username + " : " + val.tweet
+//- block content
+//- 	h1= title
+//- 	p You are currently logged in as #{ username }
+//-     form(method="post" action="/tweet")
+//-       p.tweet What's on your mind?
+//-       input.tweet#input_text(type="text" name="tweet")
+//-       input.tweet(type="submit" value="Tell everyone")
+//-     .posts
+//-       ul
+//-         each val in tweet
+//-           li=val.username + " : " + val.tweet
 
-    a(href='http://localhost:3000/') Home
+//-     a(href='http://localhost:3000/') Home
