@@ -30,16 +30,18 @@ router.get('/', function(request, response, next) {
         console.log(result[i].username + " said " + "'" +result[i].tweet + "'" + " on " + result[i].posted_at);
       }
       console.log(result.length);
-    })
+      response.render('main', { mess: result, name: result});
+    });
   } else {
     username = null;
     password = null;
+    response.render('index', { title: 'Authorize Me!', username: username, password: password});
   }
   /*
   render the index page. The username variable will be either null
   or a string indicating the username.
   */
-  response.render('index', { title: 'Authorize Me!', username: username, password: password});
+  // response.render('index', { title: 'Authorize Me!', username: username, password: password});
 });
 
 /*
