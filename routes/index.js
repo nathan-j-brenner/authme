@@ -5,15 +5,19 @@ var pg = require('pg');
 var bluebird = require('bluebird');
 var knexConfig = require('../knexfile');
 var knex = require('knex')(knexConfig);
-var redis = require("redis"), client = redis.createClient();
+var redis = require('redis');
+var client = redis.createClient();
 
 client.on('connect', function(){
   console.log('redis connected');
 })
 
+
+
+
+
 /*
-This is a request handler for loading the main page. It will check to see if
-a user is logged in, and render the index page either way.
+This is a request handler for loading the main page. It will check to see if a user is logged in, and render the index page either way.
 */
 /********************************
 if the user has logged in before, the home page for the user will display in the browser
@@ -29,18 +33,16 @@ router.get('/', function(request, response, next) {
   if (request.cookies.username && request.cookies.password) {
     username = request.cookies.username;
     password = request.cookies.password;
-    knex.select('*').from('feed').then(function(result){  //this prints out all the posts on the database
+    knex.select('*').from('feed').then(function(result){
       // for(var i = 0;i<result.length; i++){
       //   console.log(result[i].username + " said " + "'" +result[i].tweet + "'" + " on " + result[i].posted_at);
       // }
       // console.log(result.length);
       result.reverse();
-      client.set('username', result[0].tweet, function(err, reply){
-        console.log(reply);
+      client.set('tweet_message', result[0], function(error, reply){
+        console.log(result[0].tweet);
       });
-      client.get('username', function(err, reply){
-        console.log(reply);
-      })
+
       response.render('main', { mess: result, name: result});
     });
   } else {
@@ -48,6 +50,30 @@ router.get('/', function(request, response, next) {
     password = null;
     response.render('index', { title: 'Authorize Me!', username: username, password: password});
   }
+
+  // if(request.cookies.username && request.cookies.password){
+  //   username = request.cookies.username;
+  //   password = request.cookies.password;
+  //   client.lrange('feed', 0, -1, function(err, result){
+  //     if (result.length < 1){
+  //       //not in client, fetch and store:
+
+  //       //fetch tweets from db
+  //       knex('feed').select("*").then(function(result){
+  //         //set the catche
+  //         client.lpush('feed',result);
+  //         //response to browser
+  //         response.render('main', { mess: result, name: result});
+  //       })
+  //     } else {
+  //       response.render('main', {tweets: result});
+  //     }
+  //   });
+  // } else {
+  //   username = null;
+  //   password = null;
+  //   response.render('index', { title: 'Authorize Me!', username: username, password: password});
+  // }
   /*
   render the index page. The username variable will be either null
   or a string indicating the username.
@@ -57,9 +83,7 @@ router.get('/', function(request, response, next) {
 
 /*
 This is the request handler for receiving a registration request. It will check to see if the password and confirmation match, and then create a new user with the given username.
-
 It has some bugs:
-
 * if someone tries to register a username that's already in use, this handler
   will blithely let that happen.
 * If someone enters an empty username and/or password, it'll accept them
@@ -71,7 +95,6 @@ router.post('/register', function(request, response) {
   Since we're in a POST handler, we use request.body. A GET handler would use
   request.params. The parameter names correspond to the "name" attributes of
   the form fields.
-
   app.get('database') returns the knex object that was set up in app.js. app.get
   is not the same as router.get; it's more like object attributes. You could
   think of it like it's saying app.database, but express apps use .get and .set
@@ -99,7 +122,6 @@ router.post('/register', function(request, response) {
     This will insert a new record into the users table. The insert
     function takes an object whose keys are column names and whose values
     are the contents of the record.
-
     This uses a "promise" interface. It's similar to the callbacks we've
     worked with before. insert({}).then(function() {...}) is very similar
     to insert({}, function() {...});
@@ -113,7 +135,6 @@ router.post('/register', function(request, response) {
       Here we set a "username" cookie on the response. This is the cookie
       that the GET handler above will look at to determine if the user is
       logged in.
-
       Then we redirect the user to the root path, which will cause their
       browser to send another request that hits that GET handler.
       */
@@ -145,7 +166,6 @@ router.post('/register', function(request, response) {
 This is the request handler for logging in as an existing user. It will check
 to see if there is a user by the given name, then check to see if the given
 password matches theirs.
-
 Given the bug in registration where multiple people can register the same
 username, this ought to be able to handle the case where it looks for a user
 by name and gets back multiple matches. It doesn't, though; it just looks at
@@ -155,7 +175,6 @@ router.post('/login', function(request, response) {
   /*
   Fetch the values the user has sent with their login request. Again, we're
   using request.body because it's a POST handler.
-
   Again, app.get('database') returns the knex object set up in app.js.
   */
   var username = request.body.username,
@@ -238,16 +257,3 @@ router.post('/logout', function(request, response){
 })
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
