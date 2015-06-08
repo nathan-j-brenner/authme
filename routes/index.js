@@ -5,7 +5,11 @@ var pg = require('pg');
 var bluebird = require('bluebird');
 var knexConfig = require('../knexfile');
 var knex = require('knex')(knexConfig);
+var redis = require("redis"), client = redis.createClient();
 
+client.on('connect', function(){
+  console.log('redis connected');
+})
 
 /*
 This is a request handler for loading the main page. It will check to see if
@@ -25,7 +29,7 @@ router.get('/', function(request, response, next) {
   if (request.cookies.username && request.cookies.password) {
     username = request.cookies.username;
     password = request.cookies.password;
-    knex.select('*').from('feed').then(function(result){
+    knex.select('*').from('feed').then(function(result){  //this prints out all the posts on the database
       // for(var i = 0;i<result.length; i++){
       //   console.log(result[i].username + " said " + "'" +result[i].tweet + "'" + " on " + result[i].posted_at);
       // }
