@@ -8,6 +8,10 @@ block content
       p.tweet What's on your mind?
       input.tweet#input_text(type="text" name="tweet")
       input.tweet(type="submit" value="Tell everyone")
+    p Who do you want to follow?
+    form(method="post" action="/follow")
+      input(type="text" name="follow")
+      input(type="submit" value="follow")
     .posts
       ul
         each val in mess
