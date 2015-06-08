@@ -35,6 +35,12 @@ router.get('/', function(request, response, next) {
       // }
       // console.log(result.length);
       result.reverse();
+      client.set('username', result[0].tweet, function(err, reply){
+        console.log(reply);
+      });
+      client.get('username', function(err, reply){
+        console.log(reply);
+      })
       response.render('main', { mess: result, name: result});
     });
   } else {
