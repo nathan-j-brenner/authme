@@ -5,11 +5,15 @@ var pg = require('pg');
 var bluebird = require('bluebird');
 var knexConfig = require('../knexfile');
 var knex = require('knex')(knexConfig);
+var uuid = require('node-uuid');
+var redis = require('redis');
+var client = redis.createClient();
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
 
-
-
-
-
+client.on('connect', function(){
+  console.log('redis connected');
+})  
 
 /*
 This is a request handler for loading the main page. It will check to see if a user is logged in, and render the index page either way.
@@ -34,7 +38,16 @@ router.get('/', function(request, response, next) {
     }).select('*').then(function(result){
     // knex.select('*').from('feed').then(function(result){ this code will show all tweets
       result.reverse();
+      result.forEach(function(str){
+        client.lpush('result', JSON.stringify(str));
+      })
 
+      client.lrange('result', 0,-1, function(err, strs){
+        var objs = strs.map(function(str){
+          return JSON.parse(str);
+        });
+        console.log(objs);
+      })
       response.render('main', { mess: result, name: result});
     });
   } else {
@@ -110,6 +123,7 @@ router.post('/register', function(request, response) {
   already have.
   */
   var username = request.body.username,
+      user_email = request.body.email,
       password = request.body.password,
       password_confirm = request.body.password_confirm,
       database = app.get('database');
@@ -134,28 +148,36 @@ router.post('/register', function(request, response) {
     worked with before. insert({}).then(function() {...}) is very similar
     to insert({}, function() {...});
     */
-    database = app.get('database');
-    database('users').insert({
-      username: username,
-      password: password
-    }).then(function() {
-      /*
-      Here we set a "username" cookie on the response. This is the cookie
-      that the GET handler above will look at to determine if the user is
-      logged in.
-      Then we redirect the user to the root path, which will cause their
-      browser to send another request that hits that GET handler.
-      */
 
-      knex('users').where({username: username}).select('user_id').then(function(results){
-        var user_id = results[0].user_id;
-        console.log(results);
-        response.cookie('username', username);
-        response.cookie('password', password);
-        response.cookie('user_id', user_id);
-        response.redirect('/');
-      })
+    var nonce = uuid.v4();
+    var transporter = nodemailer.createTransport({
+      service: 'yahoo',
+      auth: {
+        user: 'nbblazer1827@yahoo.com',
+        pass: 'b701oMfcwWZtQ85F'
+      }
     });
+    var mailOptions = {
+      from: 'nbblazer1827@yahoo.com',
+      to: user_email,
+      subject: 'Welcome',
+      text: 'You have registed at my site.  Your username is ' + username + 'and your password is ' + password + '. Click <a href=http://localhost:3000/confirm_account/' + nonce + '>here</a> to verify'
+    }
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+        console.log(error);
+      } else{
+        console.log('Message sent: ' + info.response);
+      }
+    });
+    var clientInfo = {
+      username: username,
+      password: password,
+      user_email: user_email
+    }
+    client.set(nonce, JSON.stringify(clientInfo));
+  
   } else {
     /*
     The user mistyped either their password or the confirmation, or both.
@@ -169,6 +191,32 @@ router.post('/register', function(request, response) {
     });
   }
 });
+
+router.get('/confirm_account/:nonce', function(request, response) {
+  client.get(request.params.nonce, function(err, clientInfo){
+    client.del(request.params.nonce, function(){
+      if(clientInfo){
+        clientInfo = JSON.parse(clientInfo);
+        database = app.get('database');
+        console.log(database);
+        database('users').insert({
+          username: clientInfo.username,
+          email: clientInfo.email,
+          password: clientInfo.password
+          }).returning('username').then(function(user_id){
+            response.cookie('username', clientInfo.username);
+            response.cookie('password', clientInfo.password);
+            response.cookie('user_id', user_id);
+          }).then(function(){
+            response.redirect('/');
+          });
+      } else{
+        response.render('index', {error: "that verification code is invalid"});
+      }
+    });
+  });
+});
+
 
 /*
 This is the request handler for logging in as an existing user. It will check

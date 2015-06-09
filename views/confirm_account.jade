@@ -1,0 +1,6 @@
+extends layout
+
+block content
+	p Please check your email.
+	form(method='post', action='/confirm_account')
+		input(type="submit", value="confirm")
