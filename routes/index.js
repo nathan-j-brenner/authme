@@ -32,7 +32,7 @@ router.get('/', function(request, response, next) {
     knex('feed').where({
       username: username
     }).select('*').then(function(result){
-    // knex.select('*').from('feed').then(function(result){
+    // knex.select('*').from('feed').then(function(result){ this code will show all tweets
       result.reverse();
 
       response.render('main', { mess: result, name: result});
