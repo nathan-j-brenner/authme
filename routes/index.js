@@ -5,12 +5,7 @@ var pg = require('pg');
 var bluebird = require('bluebird');
 var knexConfig = require('../knexfile');
 var knex = require('knex')(knexConfig);
-var redis = require('redis');
-var client = redis.createClient();
 
-client.on('connect', function(){
-  console.log('redis connected');
-})
 
 
 
@@ -34,19 +29,12 @@ router.get('/', function(request, response, next) {
     username = request.cookies.username;
     password = request.cookies.password;
 
-    knex.select('*').from('feed').then(function(result){
+    knex('feed').where({
+      username: username
+    }).select('*').then(function(result){
+    // knex.select('*').from('feed').then(function(result){
       result.reverse();
-      client.del('result');
-      result.forEach(function(str){
-        client.lpush('result', JSON.stringify(str));
-      })
 
-      client.lrange('result', 0,-1, function(err, strs){
-        var objs = strs.map(function(str){
-          return JSON.parse(str);
-        });
-        console.log(objs);
-      })
       response.render('main', { mess: result, name: result});
     });
   } else {
