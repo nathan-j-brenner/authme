@@ -13,12 +13,19 @@ block content
       input(type="text" name="follow")
       input(type="submit" value="follow")
     .posts
-      if (val===undefined)
-        ul
+      ul
+        if val===undefined
           li Welcome. Make a post by typing something above
+        else
           each val in mess
             li= val.username + " said " + "'" +val.tweet + "'" + " on " + val.posted_at
     form(method="post" action="/logout")
       input(type='submit' value='logout')
 
 //- if (val=== undefined) this was below line 16 but I was getting an error
+
+      //- if (val===undefined)
+      //-   ul
+      //-     li Welcome. Make a post by typing something above
+      //-     each val in mess
+      //-       li= val.username + " said " + "'" +val.tweet + "'" + " on " + val.posted_at
