@@ -15,9 +15,6 @@ client.on('connect', function(){
   console.log('redis connected');
 })  
 
-/*
-This is a request handler for loading the main page. It will check to see if a user is logged in, and render the index page either way.
-*/
 /********************************
 if the user has logged in before, the home page for the user will display in the browser
 ********************************/
@@ -53,53 +50,13 @@ router.get('/', function(request, response, next) {
   } else {
     username = null;
     password = null;
-    response.render('index', { title: 'Authorize Me!', username: username, password: password});
-  }
-
-
-  // if (request.cookies.username && request.cookies.password) {
-  //   username = request.cookies.username;
-  //   password = request.cookies.password;
-  //   client.set('username', username, function(error, reply){
-  //     console.log(username);
-  //   client.set('tweet', )
-  //   }
-  //   knex.select('*').from('feed').then(function(result){
-  //     // for(var i = 0;i<result.length; i++){
-  //     //   console.log(result[i].username + " said " + "'" +result[i].tweet + "'" + " on " + result[i].posted_at);
-  //     // }
-  //     // console.log(result.length);
-  //     result.reverse();
-  //     client.set('tweet_message', result[0], function(error, reply){
-  //       console.log(result[0].tweet);
-  //     });
-  //     console.log(typeof result);
-  //     console.log(result.length);
-  //     if(result.length<0){
-
-  //     }
-
-  //     response.render('main', { mess: result, name: result});
-  //   });
-  // } else {
-  //   username = null;
-  //   password = null;
-  //   response.render('index', { title: 'Authorize Me!', username: username, password: password});
-  // }
-
-  // router.get('/', function(request, response){
-  //   var username, password, user_id, tweet;
-  //   if (request.cookies.username){
-  //     username = request.cookies.password;
-  //     var tweet = request.body.tweet;
-
-  //   }
-  // }
+    response.render('index', { title: 'Keepin Up', username: username, password: password});
+  } 
   /*
   render the index page. The username variable will be either null
   or a string indicating the username.
   */
-  // response.render('index', { title: 'Authorize Me!', username: username, password: password});
+ 
 });
 
 /*
@@ -272,7 +229,7 @@ router.post('/login', function(request, response) {
         index page, with an error telling the user what happened.
         */
         response.render('index', {
-          title: 'Authorize Me!',
+          title: 'Keepin Up',
           user: null,
           error: "Password incorrect"
         });

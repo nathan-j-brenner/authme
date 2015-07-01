@@ -15,6 +15,7 @@ block content
     .posts
       p You haven't posted anything yet.
   else
+    p a site to catch up with your friends
     p You are not logged in. Would you like to be?
     .log_in
       h3 Log in
@@ -24,6 +25,8 @@ block content
         input(type="password" name="password" value="password")
         br
         input(type="submit" value="Let me in!")
+        br
+        input(type="submit" value="reset password")
     .register
       h3 Register a new account
       form(method="post" action="/register")

@@ -14,6 +14,8 @@ block content
       input(type="submit" value="follow")
     .posts
       ul
+      if (val=== undefined)
+        li= Welcome. Make a post by typing something above
         each val in mess
           li= val.username + " said " + "'" +val.tweet + "'" + " on " + val.posted_at
     form(method="post" action="/logout")
